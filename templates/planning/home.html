@@ -16,7 +16,31 @@
                 <p><strong>Spielkategorie:</strong> {{ entry.game_category }}</p>
             {% endif %} 
         </div>
-        <a href="{% url 'participate' entry.id %}" class="btn">Jetzt abstimmen</a>
+        <a href="{% url 'participate' entry.id %}" class="btn">
+            {% if participation %}Antwort ändern{% else %}Jetzt abstimmen{% endif %}
+        </a>
+
+        {% if participations %}
+        <h3 style="margin-top: 2rem;">Bisherige Antworten</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Mitglied</th>
+                    <th>Teilnahme</th>
+                    <th>Kann hosten</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in participations %}
+                <tr>
+                    <td>{{ p.user.username }}</td>
+                    <td>{% if p.available %}✓{% else %}✗{% endif %}</td>
+                    <td>{% if p.can_host %}✓{% else %}–{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     {% else %}
         <p>Aktuell gibt es keine offene Runde.</p>
     {% endif %}

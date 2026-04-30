@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Game Tavern{% endblock %}</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.amber.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.violet.min.css">
         <style>
             body { max-width: 800px; margin: 0 auto; }
             .site-header {
@@ -29,7 +29,7 @@
     <body>
         <div class="container">
             <header class="site-header">
-                <strong>🎲 Game Tavern</strong>
+                <strong>Game Tavern</strong>
                 {% if user.is_authenticated %}
                     <form method="post" action="{% url 'logout' %}" style="margin:0;">
                         {% csrf_token %}

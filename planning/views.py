@@ -7,7 +7,12 @@ from .forms import ParticipationForm
 @login_required
 def home(request):
     entry = CalendarEntry.objects.filter(status='open').order_by('-created_at').first()
-    return render(request, 'planning/home.html', {'entry': entry})
+    participation = None
+    participations = []
+    if entry:
+        participation = Participation.objects.filter(user=request.user, calendar_entry=entry).first()
+        participations = Participation.objects.filter(calendar_entry=entry).select_related('user')
+    return render(request, 'planning/home.html', {'entry': entry, 'participation': participation, 'participations': participations})
 
 
 @login_required
