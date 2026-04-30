@@ -61,7 +61,7 @@ def evaluate(request, entry_id):
 
     category_ids = []
     for p in participations:
-        category_ids.extend(p.game_categories.values_list('id', flat=True))
+        category_ids.extend(p.game_category.values_list('id', flat=True))
     category_counts = Counter(category_ids)
     categories = [(GameCategory.objects.get(id=cid), count) for cid, count in category_counts.most_common()]
 
