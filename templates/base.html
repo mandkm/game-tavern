@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Game Tavern{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.amber.min.css">
+        <style>
+            body { max-width: 800px; margin: 0 auto; }
+            .site-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--pico-muted-border-color);
+                margin-bottom: 2rem;
+            }
+            .site-header strong { font-size: 1.2rem; }
+            .logout-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--pico-muted-color);
+                padding: 0;
+            }
+            .logout-btn:hover { color: var(--pico-color); }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header class="site-header">
+                <strong>🎲 Game Tavern</strong>
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}" style="margin:0;">
+                        {% csrf_token %}
+                        <span style="color: var(--pico-muted-color);">
+                            {{ user.username }} |
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </span>
+                    </form>
+                {% endif %}
+            </header>
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Aktuelle Runde - Game Tavern{% endblock %}
+
+{% block content %}
+    <h1>Aktuelle Runde</h1>
+
+    {% if entry %}
+        <div style="border: 1px solid #ccc; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
+            <p><strong>Datum:</strong> {{ entry.date|date:"d.m.Y H:i" }}</p>
+            <p><strong>Status:</strong> {{ entry.get_status_display }}</p>
+            {% if entry.location %}
+                <p><strong>Ort:</strong> {{ entry.location }}</p>
+            {% endif %}
+            {% if entry.game_category %}
+                <p><strong>Spielkategorie:</strong> {{ entry.game_category }}</p>
+            {% endif %} 
+        </div>
+        <a href="{% url 'participate' entry.id %}" class="btn">Jetzt abstimmen</a>
+    {% else %}
+        <p>Aktuell gibt es keine offene Runde.</p>
+    {% endif %}
+{% endblock %}

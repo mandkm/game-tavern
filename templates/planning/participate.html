@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Abstimmen – Game Tavern{% endblock %}
+
+{% block content %}
+    <h1>Abstimmen</h1>
+    <p><strong>Termin:</strong> {{ entry.date|date:"d.m.Y H:i" }}</p>
+
+    <form method="post" style="max-width: 500px;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn" style="margin-top: 1rem;">Speichern</button>
+    </form>
+{% endblock %}
+
