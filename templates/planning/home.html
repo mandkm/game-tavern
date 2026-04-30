@@ -9,12 +9,13 @@
         <div style="border: 1px solid #ccc; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;">
             <p><strong>Datum:</strong> {{ entry.date|date:"d.m.Y H:i" }}</p>
             <p><strong>Status:</strong> {{ entry.get_status_display }}</p>
-            {% if entry.location %}
-                <p><strong>Ort:</strong> {{ entry.location }}</p>
+            {% if entry.status == 'confirmed' %}
+                {% if entry.location %}<p>📍 {{ entry.location.name }}</p>{% endif %}
+                {% if entry.game_category %}<p>🎲 {{ entry.game_category.name }}</p>{% endif %}
+            {% else %}
+                {% if entry.location %}<p>📍 Vorschlag: {{ entry.location.name }}</p>{% endif %}
+                {% if entry.game_category %}<p>🎲 Vorschlag: {{ entry.game_category.name }}</p>{% endif %}
             {% endif %}
-            {% if entry.game_category %}
-                <p><strong>Spielkategorie:</strong> {{ entry.game_category }}</p>
-            {% endif %} 
         </div>
         <a href="{% url 'participate' entry.id %}" class="btn">
             {% if participation %}Antwort ändern{% else %}Jetzt abstimmen{% endif %}

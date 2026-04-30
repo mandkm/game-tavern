@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Auswerung - Game Tavern{% endblock %}
+
+{% block content %}
+    <h1>Auswertung</h1>
+    <p><strong>Termin:</strong> {{ entry.date|date:"d.m.Y H:i" }}</p>
+        
+        <div class="grid">
+            <article>
+                <header>Verfügbarkeit</header>
+                <p>Kann teilnehmen: <strong>{{ available_count }}</strong></p>
+                <p>Kann nicht teilnehmen: <strong>{{ cant_count }}</strong></p>
+            </article>
+            <article>
+                <header>Mögliche Gastgeber</header>
+                {% for p in hosts %}
+                    <p>{{ p.user.username }}{% if p.user.orte.exists %} - {{ p.user.orte.first.name }}{% endif %}</p>
+                {% empty %}
+                    <p>Niemand hat sich als Gastgeber angeboten.</p>
+                {% endfor %}
+            </article>
+        </div>
+
+        <article>
+            <header>Spielstimmung</header>
+            {% for category, count in categories %}
+                <p>{{ category.name }}: <strong>{{ count }}x</strong></p>
+            {% empty %}
+                <p>Keine Angaben</p>
+            {% endfor %}    
+        </article>
+        
+        {% if alt_counts %}
+        <article>
+            <header>Alternativtermine</header>
+            {% for date, count in alt_counts.items %}
+                <p>{{ date|date:"d.m.Y H:i" }}: <strong>{{ count }}x</strong></p>
+            {% endfor %}
+        </article>
+        {% endif %}  
+
+        <article>
+            <header>Termin bestätigen</header>
+            <form method="post" action="{% url 'evaluate' entry.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="confirm">
+                <div class="grid">
+                    <label>Datum
+                        <input type="datetime-local" name="date" required>
+                    </label>
+                    <label>Ort
+                        <select name="location_id">
+                            <option value="">– kein Ort –</option>
+                            {% for p in hosts %}
+                                {% for ort in p.user.orte.all %}
+                                    <option value="{{ ort.id }}">{{ ort.name }} ({{ p.user.username }})</option>
+                                {% endfor %}
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+                <button type="submit" class="btn">Termin bestätigen</button>
+            </form>
+            <form method="post" action="{% url 'send_reminder' entry.id %}" style="margin-top: 1rem;">
+                {% csrf_token %}
+                <button type="submit">📣 Erinnerung senden</button>
+            </form>
+        </article>
+    {% endblock %}
+
+

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Termine - Game Tavern{% endblock %}
+
+{% block content %}
+    <h1>Termine</h1>
+
+    {% if entries %}
+        {% for entry in entries %}
+           <article>
+            <header>
+                <strong>{{ entry.date|date:"d.m.Y H:i" }}</strong>
+                <span> - {{ entry.get_status_display }}</span>
+            </header>
+                {% if entry.status == 'confirmed' %}
+                    {% if entry.location %}<p>📍 {{ entry.location.name }}</p>{% endif %}
+                    {% if entry.game_category %}<p>🎲 {{ entry.game_category.name }}</p>{% endif %}
+                {% else %}
+                    {% if entry.location %}<p>📍 Vorschlag: {{ entry.location.name }}</p>{% endif %}
+                    {% if entry.game_category %}<p>🎲 Vorschlag: {{ entry.game_category.name }}</p>{% endif %}
+                {% endif %}
+            {% if entry.status == 'open' %}
+            <footer>
+                <a href="{% url 'participate' entry.id %}" class="btn">Abstimmen</a>
+            </footer>
+            {% endif %}
+        </article>
+        {% endfor %}
+    {% else %}
+        <p>Es sind derzeit keine Termine geplant.</p>
+    {% endif %}
+{% endblock %}
+
+{% if user.is_staff %}
+    <a href="{% url 'evaluate' entry.id %}" role="button" class="secondary">Auswerten</a>
+{% endif %}
