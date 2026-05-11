@@ -17,6 +17,11 @@ class Game(models.Model):
         blank=True,
         related_name='games'
     )
+    min_players = models.PositiveIntegerField(null=True, blank=True)
+    max_players = models.PositiveIntegerField(null=True, blank=True)
+    min_age = models.PositiveIntegerField(null=True, blank=True)
+    duration_minutes = models.PositiveIntegerField(null=True, blank=True, help_text="Spielzeit in Minuten")
+
 
     def __str__(self):
         return self.name
