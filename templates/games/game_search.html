@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="library-header">
+    <h1>Spiel hinzufügen</h1>
+    <a href="{% url 'game_list' %}" class="btn">← Zurück zur Bibliothek</a>
+</div>
+
+<form method="get" class="search-form">
+    <input type="text" name="q" value="{{ query }}" placeholder="Spielname suchen..." autofocus>
+    <button type="submit" class="btn">Suchen</button>
+</form>
+
+<div class="game-grid">
+    {% for game in games %}
+    <div class="game-card {% if game.id in owned_ids %}owned{% endif %}">
+        <div class="game-card-header">
+            <h3>{{ game.name }}</h3>
+            {% if game.category %}<span class="category-badge">{{ game.category }}</span>{% endif %}
+        </div>
+        <div class="game-card-body">
+            <ul class="game-info">
+                {% if game.min_players or game.max_players %}
+                <li>👥 {{ game.min_players }}–{{ game.max_players }} Spieler</li>
+                {% endif %}
+                {% if game.duration_minutes %}<li>⏱ {{ game.duration_minutes }} Min.</li>{% endif %}
+                {% if game.min_age %}<li>🔞 ab {{ game.min_age }} Jahren</li>{% endif %}
+            </ul>
+        </div>
+        <div class="game-card-footer">
+            <form method="post" action="{% url 'toggle_owned' game.id %}">
+                {% csrf_token %}
+                {% if game.id in owned_ids %}
+                    <button type="submit" class="btn btn-danger">✓ In Bibliothek – Entfernen</button>
+                {% else %}
+                    <button type="submit" class="btn">+ Hinzufügen</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    {% empty %}
+    <p>Keine Spiele gefunden.</p>
+    {% endfor %}
+</div>
+{% endblock %}
